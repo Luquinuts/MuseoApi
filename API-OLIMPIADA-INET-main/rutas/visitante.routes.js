@@ -3,14 +3,14 @@ import {
     VisitanteRegister
  } from "../controllers/visitante.contoller.js";
 
-const routerG = express.Router();
+const routerV = express.Router();
 
 //POST
 //routerA.post('/', );
-routerG.post('/VisitanteRegister', VisitanteRegister );
-routerG.post('/', );
+routerV.post('/VisitanteRegister', VisitanteRegister );
+routerV.post('/', );
 
 //PATCH
 //routerA.patch('/', );
 
-export default routerG;
+export default routerV;
