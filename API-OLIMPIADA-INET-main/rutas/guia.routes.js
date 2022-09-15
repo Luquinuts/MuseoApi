@@ -1,14 +1,13 @@
 import express from "express";
 import {
-    
- } from "../controllers/AdminController.js";
+    GuiaRegister
+} from "../controllers/guia.controller.js";
 
 const routerG = express.Router();
 
 //POST
 //routerA.post('/', );
-routerG.post('/',  );
-routerG.post('/', );
+routerG.post('/GuiaRegister', GuiaRegister);
 
 //PATCH
 //routerA.patch('/', );

@@ -2,9 +2,24 @@ import conexion from "../DB/DB.js";
 
 export const registrarInstitucion = async(req,res)=>{
     try {
+        let idInstitucion;
         await conexion.query("INSERT INTO `institucion`( `nombre`, `Mapainstalaciones`) VALUES (?,?)",{
             replacements:[req.body.nombreInstalaciones, req.body.Mapainstalaciones],
-        });
+        })
+        .then(function (idInstitucion)
+            {
+                idInstitucion = idInstitucion[0];
+            }
+        );
+        /************************************************************/
+        await conexion.query("INSERT INTO `recorrido`( `idInstitucion`) VALUES (?)",{
+            replacements:[idInstitucion],
+        })
+        /************************************************************/
+        await conexion.query("INSERT INTO `inscriptor`( `idInstitucion`) VALUES (?)",{
+            replacements:[idInstitucion],
+        }) 
+        /************************************************************/
         res.status(201).json({msg:"Museo Registrado"});
     } catch (error) {
         console.log(error.message);
@@ -21,7 +36,6 @@ export const editarNombreMuseo = async(req, res) =>{
         console.log(error.message);
     }
 }
-
 
 export const MostrarMuseo = async(req,res)=>{
     try {

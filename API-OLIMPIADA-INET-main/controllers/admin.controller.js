@@ -3,23 +3,35 @@ import conexion from "../DB/DB.js";
 export const registrarUsuarioAdmin = async(req, res) =>{
     try {
         /************************************************************/
-        let IdUsuario;
-        await conexion.query("INSERT INTO `usuario`(`dni`, `nombre`, `apellido`) VALUES (?,?,?)",
+        let IdUsuario= null;
+        let IdGuia;
+        const [response] = await conexion.query("SELECT  `idUsuario` FROM `usuario` WHERE `dni`=(?)",
         {
-            replacements: [req.body.dni, req.body.nombre, req.body.apellido],
+            replacements: [req.body.dni],
         })
-        .then(function (idUsuario)
-            {
-                IdUsuario = idUsuario[0];
+        IdUsuario = response[0].idUsuario;
+            if(IdUsuario == null){
+                await conexion.query("INSERT INTO `usuario`(`dni`, `nombre`, `apellido`) VALUES (?,?,?)",
+                {
+                    replacements: [req.body.dni, req.body.nombre, req.body.apellido],
+                })
+                .then(function (idUsuario)
+                    {
+                        IdUsuario = idUsuario[0];
+                    }
+                );
+                await conexion.query("INSERT INTO `administrador`(`idUsuario`, `username`, `password`) VALUES (?,?,?)",
+                {
+                    replacements: [IdUsuario, req.body.username, req.body.password],
+                })
+            } else {
+                await conexion.query("INSERT INTO `administrador`(`idUsuario`, `username`, `password`) VALUES (?,?,?)",
+                {
+                    replacements: [IdUsuario, req.body.username, req.body.password],
+                })
             }
-        );
         /************************************************************/
-        await conexion.query("INSERT INTO `administrador`(`idUsuario`, `username`, `password`) VALUES (?,?,?)",
-        {
-            replacements: [IdUsuario, req.body.username, req.body.password],
-        })
         res.status(201).json({msg: "+"});
-        /************************************************************/
     } catch (error) {
         console.log(error.message);
     }
