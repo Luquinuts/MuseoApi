@@ -4,7 +4,7 @@ export const VisitaGuiadaRegister = async(req, res) =>{
     try {
         /************************************************************/
         let IdGuia;
-        await conexion.query("SELECT INTO `guia` (`idGuia`) WHERE `idGuia`=(?)",
+        await conexion.query("SELECT `idGuia` FROM `guia` WHERE `idGuia`=(?)",
         {
             replacements: [req.body.idGuia],
         })
@@ -15,7 +15,7 @@ export const VisitaGuiadaRegister = async(req, res) =>{
         );
         /************************************************************/
         let IdRecorrido;
-        await conexion.query("SELECT INTO `recorrido`(`idRecorrido`) WHERE `idRecorrido`=(?)",
+        await conexion.query("SELECT `idRecorrido` FROM `recorrido` WHERE `idRecorrido`=(?)",
         {
             replacements: [req.body.idRecorrido],
         })
@@ -25,11 +25,22 @@ export const VisitaGuiadaRegister = async(req, res) =>{
         }
         );
         /************************************************************/
-        await conexion.query("INSERT INTO `visitaguiada`(`fecha`, `hora`, `idRecorrido`, `idGuia`) VALUES (?)",
+        await conexion.query("INSERT `visitaguiada`(`fecha`, `hora`, `idRecorrido`, `idGuia`) VALUES (?)",
         {
-            replacements: [req.body.fecha, req.body.hora, idRecorrido , IdGuia],
+            replacements: [req.body.fecha, req.body.hora, IdRecorrido , IdGuia],
         });
         res.status(201).json({msg:"Idioma Registrado"});
+        /************************************************************/
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const VisitaGuiadaView = async(req, res) =>{
+    try {
+        /************************************************************/
+        const [response]= await conexion.query("SELECT `fecha`, `hora` FROM  `visitaguiada` ")
+        res.status(201).json(response);
         /************************************************************/
     } catch (error) {
         console.log(error.message);
