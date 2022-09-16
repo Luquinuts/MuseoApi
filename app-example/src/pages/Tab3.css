@@ -1,0 +1,10 @@
+.IonTitle{
+    color: blue;
+}
+
+.IonDatetime{
+    color: red;
+    background-color: blue;
+    -moz-box-align: center;
+    
+}
